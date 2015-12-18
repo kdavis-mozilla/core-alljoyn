@@ -90,8 +90,8 @@ class ReplyReceiver : public ajn::ProxyBusObject::Listener, public ajn::MessageR
         QStatus status;
         qcc::String errorMessage;
 
-        _Env(ReplyReceiver* thiz, Plugin& plugin, BusAttachment& busAttachment, ProxyBusObject& proxyBusObject, qcc::String& interfaceName, qcc::String& methodName, CallbackNative* callbackNative, const NPVariant* npargs, uint32_t npargCount) :
-            thiz(thiz),
+        _Env(ReplyReceiver& thiz, Plugin& plugin, BusAttachment& busAttachment, ProxyBusObject& proxyBusObject, qcc::String& interfaceName, qcc::String& methodName, CallbackNative* callbackNative, const NPVariant* npargs, uint32_t npargCount) :
+            thiz(&thiz),
             plugin(plugin),
             busAttachment(busAttachment),
             proxyBusObject(proxyBusObject),
@@ -119,7 +119,7 @@ class ReplyReceiver : public ajn::ProxyBusObject::Listener, public ajn::MessageR
     typedef qcc::ManagedObj<_Env> Env;
     Env env;
     ReplyReceiver(Plugin& plugin, BusAttachment& busAttachment, ProxyBusObject& proxyBusObject, qcc::String& interfaceName, qcc::String& methodName, CallbackNative* callbackNative, const NPVariant* npargs, uint32_t npargCount) :
-        env(this, plugin, busAttachment, proxyBusObject, interfaceName, methodName, callbackNative, npargs, npargCount) { }
+        env(*this, plugin, busAttachment, proxyBusObject, interfaceName, methodName, callbackNative, npargs, npargCount) { }
     virtual ~ReplyReceiver() { }
 
     class IntrospectCBContext : public PluginData::CallbackContext {
